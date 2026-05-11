@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cd OmniNFT/
-
 export PYTHONPATH=$(pwd):$PYTHONPATH
 export TOKENIZERS_PARALLELISM=false
 export WANDB_MODE=offline
@@ -23,6 +21,15 @@ echo "  Rank: $NODE_RANK"
 echo "  Master: $MASTER_ADDR:$MASTER_PORT"
 echo "  Total Processes: $TOTAL_PROCESSES"
 
+REWARD_BASE="Omni_Reward_Series"
+
+export HPSV3_CKPT_PATH="${REWARD_BASE}/HPSv3/HPSv3.safetensors"
+export VIDEOALIGN_CKPT_DIR="${REWARD_BASE}/VideoReward"
+export AUDIOBOX_CKPT="${REWARD_BASE}/audiobox-aesthetics/checkpoint.pt"
+export CLAP_CKPT="${REWARD_BASE}/CLAP"
+export IMAGEBIND_CKPT="${REWARD_BASE}/ImageBind/imagebind_huge.pth"
+export SYNCHFORMER_CKPT="${REWARD_BASE}/synchformer/synchformer_state_dict.pth"
+
 export HPSV3_REWARD_SERVER='10.185.127.97'
 export HPSV3_REWARD_PORT="8001"
 
@@ -35,5 +42,3 @@ echo "当前使用的配置项是: $CONFIG_ITEM"
 torchrun --nnodes $NNODES --nproc_per_node $GPUS_PER_NODE --node_rank $NODE_RANK \
     --master_addr $MASTER_ADDR --master_port $MASTER_PORT \
     scripts/train_omninft_ltx_fsdp.py --config config/nft.py:$CONFIG_ITEM
-
-sleep 1d
