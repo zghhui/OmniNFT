@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "hpsv3"
+version = "1.0.0"
+description = "HPSv3: Towards Wide-Spectrum Human Preference Score - A VLM-based preference model for image quality assessment"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Yunhao Shui"},
+    {name = "Yuhang Ma"},
+]
+keywords = ["machine learning", "computer vision", "human preference", "image quality", "VLM", "multimodal"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers", 
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9", 
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+dependencies = [
+    "datasets>=2.10.0",
+    "diffusers>=0.20.0",
+    "Pillow>=9.0.0",
+    "numpy>=1.20.0",
+    "tqdm>=4.60.0",
+    "pyyaml>=6.0",
+    "omegaconf>=2.3.0",
+    "opencv-python>=4.5.0",
+    "safetensors>=0.3.0",
+    "einops>=0.6.0",
+    "qwen-vl-utils>=0.0.8",
+    "timm>=0.9.0",
+    "deepspeed>=0.12.0",
+    "peft>=0.8.0",
+    "trl>=0.7.0",
+    "fire>=0.7.0"
+]
+
+[project.urls]
+Homepage = "https://mizzenai.github.io/HPSv3/"
+Source = "https://github.com/MizzenAI/HPSv3"
+Documentation = "https://github.com/MizzenAI/HPSv3/blob/main/README.md"
+Paper = "https://arxiv.org/abs/2411.07232"
+
+[tool.setuptools.packages.find]
+include = ["hpsv3*", "generate*", "evaluate*"]
+
+[tool.setuptools.package-data]
+hpsv3 = ["config/*.yaml", "config/ds_config/*.json"]
