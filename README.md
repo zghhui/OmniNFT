@@ -11,11 +11,11 @@
 
 ## 🏗️ Method Overview
 
-**Modality-wise Advantage Routing** — Instead of collapsing all rewards into a single global advantage, OmniNFT computes independent per-reward advantages for video, audio, and cross-modal synchronization, then routes each to its responsible generation branch.
+**Modality-wise Advantage Routing** — Instead of collapsing all rewards into a single global advantage, OmniNFT computes independent per-reward advantages for video, audio, and cross-modal synchronization, then routes each to its responsible generation branch — uni-modal advantages supervise only their own branch while the synchronization advantage is broadcast to both — resolving the advantage inconsistency where roughly half of samples receive opposing rewards across modalities.
 
-**Layer-wise Gradient Surgery** — OmniNFT applies a partial stop-gradient on the audio key-value projections in A2V cross-attention at shallow Transformer blocks, suppressing erroneous gradient injection while preserving full gradient flow through the deeper cross-modal alignment layers (AV-Sync Zone).
+**Layer-wise Gradient Surgery** — To address gradient imbalance where video-branch gradients leak into shallow audio layers dedicated to intra-modal generation, OmniNFT applies a partial stop-gradient on the audio key-value projections in A2V cross-attention at shallow Transformer blocks, suppressing erroneous gradient injection while preserving full gradient flow through the deeper cross-modal alignment layers (AV-Sync Zone).
 
-**Region-wise Loss Reweighting** — Leveraging V2A cross-attention maps from late denoising steps as an intrinsic proxy for sound-emitting critical regions, OmniNFT aggregates them into per-token importance weights.
+**Region-wise Loss Reweighting** — Leveraging V2A cross-attention maps from late denoising steps as an intrinsic proxy for sound-emitting critical regions, OmniNFT aggregates them into per-token importance weights that modulate the video-branch RL loss, providing fine-grained credit assignment that concentrates optimization capacity on regions most critical for audio-video synchronization without requiring external detection modules.
 
 ---
 
@@ -35,10 +35,34 @@ pip install -r requirements.txt
 |---|---|---|
 | `LTX-2_MODEL` | LTX-2 base model | [LTX-2](https://huggingface.co/Lightricks/LTX-2) |
 | `OmniNFT_LTX-2` | LTX-2 + OmniNFT | [OmniNFT](https://huggingface.co/zghhui/OmniNFT) |
-| `REWARD_MODELS` | All reward models (HPSv3, CLAP, AudioBox, Synchformer, ImageBind, etc.) | [OmniNFT-Reward-Series](https://huggingface.co/zghhui/Omni_Reward_Series) |
+| `REWARD_MODELS` | All reward models (HPSv3, CLAP, AudioBox, Synchformer, ImageBind, etc.) | [OmniNFT-Reward-Series](https://huggingface.co/zghhui/OmniNFT-Reward-Series) |
 
 
 ## 🚀 Training
+
+### Step 0: Download Reward Models
+
+Download all reward model weights from HuggingFace:
+
+```bash
+huggingface-cli download --resume-download zghhui/OmniNFT-Reward-Series --local-dir Omni_Reward_Series
+```
+
+<details>
+<summary><strong>Reward model checkpoints under <code>Omni_Reward_Series/</code></strong></summary>
+
+| Env Variable | Path | Description |
+|---|---|---|
+| `HPSV3_CKPT_PATH` | `Omni_Reward_Series/HPSv3/HPSv3.safetensors` | HPSv3 image quality scorer |
+| `VIDEOALIGN_CKPT_DIR` | `Omni_Reward_Series/VideoReward` | VideoAlign video quality scorer |
+| `AUDIOBOX_CKPT` | `Omni_Reward_Series/audiobox-aesthetics/checkpoint.pt` | AudioBox aesthetics predictor |
+| `CLAP_CKPT` | `Omni_Reward_Series/CLAP` | CLAP audio-text alignment model |
+| `IMAGEBIND_CKPT` | `Omni_Reward_Series/ImageBind/imagebind_huge.pth` | ImageBind multimodal embeddings |
+| `SYNCHFORMER_CKPT` | `Omni_Reward_Series/synchformer/synchformer_state_dict.pth` | Synchformer AV sync scorer |
+
+All paths are pre-configured in `bash_train_omninft_ltx_fsdp.sh` as relative paths.
+
+</details>
 
 ### Step 1: Launch Reward Servers
 
@@ -46,31 +70,16 @@ HPSv3 and VideoAlign run as remote HTTP servers. Start them **before** training:
 
 ```bash
 # Terminal 1: HPSv3 server
-export HPSV3_CKPT_PATH=/path/to/HPSv3.safetensors
 bash flow_grpo/server/run_remote_hpsv3.sh
 
 # Terminal 2: VideoAlign server
-export VIDEOALIGN_CKPT_DIR=/path/to/VideoReward
 bash flow_grpo/server/run_remote_videoalign.sh
 ```
 
-### Step 2: Multi(Single)-Node Training (Optional)
-
-Set the following on **each** node:
+### Step 2: Multi(Single)-Node Training
 
 ```bash
-
-export HPSV3_REWARD_SERVER=<server_ip>
-export HPSV3_REWARD_PORT=8001
-export VIDEOALIGN_REWARD_SERVER=<server_ip>
-export VIDEOALIGN_REWARD_PORT=8002
-
-export WORLD_SIZE=<num_nodes>
-export RANK=<node_rank>
-export MASTER_ADDR=<master_ip>
-export MASTER_PORT=6000
-
-bash train_omninft_ltx_fsdp.sh branch_aware_layer_surgery_avweight
+bash bash_train_omninft_ltx_fsdp.sh branch_aware_layer_surgery_avweight
 ```
 
 
