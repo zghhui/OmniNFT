@@ -3,10 +3,16 @@
 
 <p align="center">
   <a href="https://huggingface.co/zghhui/OmniNFT"><img src="https://img.shields.io/badge/%F0%9F%A4%97%20HuggingFace-OmniNFT-ffc107?logoColor=white" alt="HuggingFace"/></a>
-  <a href="https://github.com/zghhui/OmniNFT"><img src="https://img.shields.io/badge/arXiv-Paper-b5212f?logo=arxiv" alt="ArXiv"/></a>
+  <a href="https://arxiv.org/abs/2605.12480"><img src="https://img.shields.io/badge/arXiv-Paper-b5212f?logo=arxiv" alt="ArXiv"/></a>
   <a href="https://zghhui.github.io/OmniNFT/"><img src="https://img.shields.io/badge/🌐-Project%20Page-blue" alt="Project Page"/></a>
 </p>
 
+---
+## 🔈 News
+- [2026-05-13] OmniNFT is released on [Arixv](https://arxiv.org/abs/2605.12480).
+- [2026-05-11] Code and model weights are available!
+
+  
 ---
 
 ## 🏗️ Method Overview
@@ -144,9 +150,11 @@ Outputs are saved to `--output_dir`: `.mp4` (video with audio) and `.wav` (audio
 ## 🖊️ Citation
 
 ```bibtex
-@article{omninft2025,
-  title={OmniNFT: Branch-Aware GRPO for Audio-Video Generation},
-  year={2025}
+@article{zhang2026omninft,
+  title={OmniNFT: Modality-wise Omni Diffusion Reinforcement for Joint Audio-Video Generation},
+  author={Zhang, Guohui and Ma, XiaoXiao and Huang, Jie and Xu, Hang and Yu, Hu and Fu, Siming and Li, Yuming and Xue, Zeyue and Song, Lin and Huang, Haoyang and Duan, Nan and Zhao, Feng},
+  journal={arXiv preprint arXiv:2605.12480},
+  year={2026}
 }
 ```
 
