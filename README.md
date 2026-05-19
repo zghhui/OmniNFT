@@ -9,8 +9,9 @@
 
 ---
 ## 🔈 News
+- [2026-05-19] LTX-2.3 has been supported 🚀. LoRA weights for LTX-2.3 are now available!
 - [2026-05-13] OmniNFT is released on [Arixv](https://arxiv.org/abs/2605.12480).
-- [2026-05-11] Code and model weights are available!
+- [2026-05-11] Code and LoRA weights for LTX-2 are available.
 
   
 ---
