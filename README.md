@@ -17,6 +17,9 @@
 ---
 
 ## 🏗️ Method Overview
+<p align="center">
+  <img src="assets/framework.png" width="90%" />
+</p>
 
 **Modality-wise Advantage Routing** — Instead of collapsing all rewards into a single global advantage, OmniNFT computes independent per-reward advantages for video, audio, and cross-modal synchronization, then routes each to its responsible generation branch — uni-modal advantages supervise only their own branch while the synchronization advantage is broadcast to both — resolving the advantage inconsistency where roughly half of samples receive opposing rewards across modalities.
 
@@ -40,8 +43,8 @@ pip install -r requirements.txt
 
 | Env Variable | Description | Source |
 |---|---|---|
-| `LTX-2_MODEL` | LTX-2 base model | [LTX-2](https://huggingface.co/Lightricks/LTX-2) |
-| `OmniNFT_LTX-2` | LTX-2 + OmniNFT | [OmniNFT](https://huggingface.co/zghhui/OmniNFT) |
+| `LTX-MODEL` | LTX base model | [LTX-2](https://huggingface.co/Lightricks/LTX-2) [LTX-2.3](https://huggingface.co/Lightricks/LTX-2.3) |
+| `OmniNFT_LTX` | LTX + OmniNFT | [OmniNFT](https://huggingface.co/zghhui/OmniNFT) |
 | `REWARD_MODELS` | All reward models (HPSv3, CLAP, AudioBox, Synchformer, ImageBind, etc.) | [OmniNFT-Reward-Series](https://huggingface.co/zghhui/OmniNFT-Reward-Series) |
 
 
