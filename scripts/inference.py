@@ -167,7 +167,7 @@ def main():
         audio_unpatch_state = audio_tools.clear_conditioning(audio_state)
         audio_unpatch_state = audio_tools.unpatchify(audio_unpatch_state)
 
-        video_float = sampler._decode_video(video_unpatch_state, device, False)
+        video_float = sampler._decode_video(video_unpatch_state, device, None)
         video_out = (video_float.clamp(0.0, 1.0) * 255.0).to(torch.uint8)
         video_out = video_out.permute(1, 2, 3, 0)
 
