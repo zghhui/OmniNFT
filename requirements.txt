@@ -1,4 +1,4 @@
-absl==0.0
+absl-py==2.4.0 
 audiobox_aesthetics==0.0.4
 av==16.1.0
 bitsandbytes==0.49.2
